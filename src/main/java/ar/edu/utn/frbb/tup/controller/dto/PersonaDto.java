@@ -1,6 +1,6 @@
-package ar.edu.utn.frbb.tup.controller;
+package ar.edu.utn.frbb.tup.controller.dto;
 
-import ar.edu.utn.frbb.tup.model.TipoPersona;
+import ar.edu.utn.frbb.tup.model.enums.TipoPersona;
 
 import java.time.LocalDate;
 

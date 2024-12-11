@@ -1,12 +1,13 @@
 package ar.edu.utn.frbb.tup.model;
 
-import ar.edu.utn.frbb.tup.controller.ClienteDto;
-
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
+
+import ar.edu.utn.frbb.tup.controller.dto.ClienteDto;
+import ar.edu.utn.frbb.tup.model.enums.TipoPersona;
+import ar.edu.utn.frbb.tup.model.enums.TipoCuenta;
+import ar.edu.utn.frbb.tup.model.enums.TipoMoneda;
 
 public class Cliente extends Persona{
 
@@ -18,10 +19,14 @@ public class Cliente extends Persona{
     public Cliente() {
         super();
     }
+    
     public Cliente(ClienteDto clienteDto) {
         super(clienteDto.getDni(), clienteDto.getApellido(), clienteDto.getNombre(), clienteDto.getFechaNacimiento());
         fechaAlta = LocalDate.now();
         banco = clienteDto.getBanco();
+
+        this.tipoPersona = TipoPersona.fromString(clienteDto.getTipoPersona());
+
     }
 
     public TipoPersona getTipoPersona() {
