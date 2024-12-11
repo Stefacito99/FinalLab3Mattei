@@ -1,5 +1,6 @@
 package ar.edu.utn.frbb.tup.controller.handler;
 
+import ar.edu.utn.frbb.tup.model.exception.DatosIncorrectosException;
 import ar.edu.utn.frbb.tup.model.exception.TipoCuentaAlreadyExistsException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -37,8 +38,16 @@ public class TupResponseEntityExceptionHandler extends ResponseEntityExceptionHa
                 new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
+    @ExceptionHandler({DatosIncorrectosException.class})
+    protected ResponseEntity<Object> handleNoSoportada(
+            Exception ex, WebRequest request) {
+        CustomApiError error = new CustomApiError();
+        error.setErrorMessage(ex.getMessage());
+        return handleExceptionInternal(ex, error,
+                new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
 
-
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         if (body == null) {

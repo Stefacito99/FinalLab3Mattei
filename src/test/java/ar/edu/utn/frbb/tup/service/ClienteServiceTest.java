@@ -98,7 +98,7 @@ public class ClienteServiceTest {
         verify(clienteDao, times(1)).save(pepeRino);
 
         assertEquals(1, pepeRino.getCuentas().size());
-        assertEquals(pepeRino, cuenta.getTitular());
+        assertEquals(pepeRino.getDni(), cuenta.getDniTitular());
 
     }
 
@@ -129,7 +129,7 @@ public class ClienteServiceTest {
         assertThrows(TipoCuentaAlreadyExistsException.class, () -> clienteService.agregarCuenta(cuenta2, luciano.getDni()));
         verify(clienteDao, times(1)).save(luciano);
         assertEquals(1, luciano.getCuentas().size());
-        assertEquals(luciano, cuenta.getTitular());
+        assertEquals(luciano.getDni(), cuenta.getDniTitular());
 
     }
 

@@ -35,7 +35,7 @@ public class CuentaService {
         //Chequear cuentas soportadas por el banco CA$ CC$ CAU$S
         // if (!tipoCuentaEstaSoportada(cuenta)) {...}
 
-        clienteService.agregarCuenta(cuenta, cuenta.getDniTitular());
+        clienteService.agregarCuenta(cuenta, cuentaDto.getDniTitular());
         cuentaDao.save(cuenta);
         return cuenta;
     }

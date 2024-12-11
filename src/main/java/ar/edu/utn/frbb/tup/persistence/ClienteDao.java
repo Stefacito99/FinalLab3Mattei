@@ -30,15 +30,8 @@ public class ClienteDao extends AbstractBaseDao{
     }
 
     public void save(Cliente cliente) throws DatosIncorrectosException {
-        try {
-            if (find(cliente.getDni(), true) != null) {
-                throw new DatosIncorrectosException("Ya existe un cliente con DNI " + cliente.getDni());
-            }
-
-            getInMemoryDatabase().put(cliente.getDni(), new ClienteEntity(cliente));
-        } catch (Exception e) {
-            throw new RuntimeException("Error al guardar el cliente con DNI: " + cliente.getDni(), e);
-        }
+        ClienteEntity entity = new ClienteEntity(cliente);
+        getInMemoryDatabase().put(cliente.getDni(), entity);
     }
 
     @Override

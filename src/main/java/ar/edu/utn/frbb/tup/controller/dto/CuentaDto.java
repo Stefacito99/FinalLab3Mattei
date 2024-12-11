@@ -12,6 +12,9 @@ public class CuentaDto extends ClienteDto{
     private String tipoCuenta;
     private String tipoMoneda;
     private LocalDateTime fechaCreacion;
+    private long dniTitular;
+
+    
 
     
 
@@ -52,5 +55,13 @@ public class CuentaDto extends ClienteDto{
 
     public void setTipoMoneda(String tipoMoneda) {
         this.tipoMoneda = tipoMoneda;
+    }
+
+    public long getDniTitular() {
+        return dniTitular;
+    }
+
+    public void setDniTitular(long dniTitular) {
+        this.dniTitular = dniTitular;
     }
 }

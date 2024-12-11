@@ -17,7 +17,6 @@ public class Cuenta {
     private LocalDateTime fechaCreacion;
     private double balance;
     private TipoCuenta tipoCuenta;
-    private Cliente titular;
     private TipoMoneda moneda;
     private long dniTitular;
 
@@ -33,7 +32,7 @@ public class Cuenta {
         this.fechaCreacion = LocalDateTime.now();
         this.balance = cuentaDto.getBalance();
         this.numeroCuenta = contadorCuentas++;
-        this.dniTitular = cuentaDto.getDni();
+        this.dniTitular = cuentaDto.getDniTitular();
     }
 
     
@@ -43,7 +42,7 @@ public class Cuenta {
     }
 
     public void setDniTitular(long dniTitular) {
-        this.dniTitular = titular.getDni();
+        this.dniTitular = dniTitular;
     }
 
     public long getNumeroCuenta() {
@@ -79,14 +78,6 @@ public class Cuenta {
     public Cuenta setTipoCuenta(TipoCuenta tipoCuenta) {
         this.tipoCuenta = tipoCuenta;
         return this;
-    }
-
-    public Cliente getTitular() {
-        return titular;
-    }
-
-    public void setTitular(Cliente titular) {
-        this.titular = titular;
     }
 
     public TipoMoneda getMoneda() {
