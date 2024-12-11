@@ -3,6 +3,7 @@ package ar.edu.utn.frbb.tup.service;
 import ar.edu.utn.frbb.tup.controller.dto.CuentaDto;
 import ar.edu.utn.frbb.tup.model.Cuenta;
 import ar.edu.utn.frbb.tup.model.exception.CuentaAlreadyExistsException;
+import ar.edu.utn.frbb.tup.model.exception.DatosIncorrectosException;
 import ar.edu.utn.frbb.tup.model.exception.TipoCuentaAlreadyExistsException;
 import ar.edu.utn.frbb.tup.persistence.CuentaDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class CuentaService {
     //    2 - cuenta no soportada
     //    3 - cliente ya tiene cuenta de ese tipo
     //    4 - cuenta creada exitosamente
-    public Cuenta darDeAltaCuenta(CuentaDto cuentaDto) throws CuentaAlreadyExistsException, TipoCuentaAlreadyExistsException {
+    public Cuenta darDeAltaCuenta(CuentaDto cuentaDto) throws CuentaAlreadyExistsException, TipoCuentaAlreadyExistsException, DatosIncorrectosException {
         
         Cuenta cuenta = new Cuenta(cuentaDto);
         

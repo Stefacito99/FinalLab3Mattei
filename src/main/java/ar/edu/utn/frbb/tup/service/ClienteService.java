@@ -4,6 +4,7 @@ import ar.edu.utn.frbb.tup.controller.dto.ClienteDto;
 import ar.edu.utn.frbb.tup.model.Cliente;
 import ar.edu.utn.frbb.tup.model.Cuenta;
 import ar.edu.utn.frbb.tup.model.exception.ClienteAlreadyExistsException;
+import ar.edu.utn.frbb.tup.model.exception.DatosIncorrectosException;
 import ar.edu.utn.frbb.tup.model.exception.TipoCuentaAlreadyExistsException;
 import ar.edu.utn.frbb.tup.persistence.ClienteDao;
 import org.springframework.stereotype.Service;
@@ -17,10 +18,10 @@ public class ClienteService {
         this.clienteDao = clienteDao;
     }
 
-    public Cliente darDeAltaCliente(ClienteDto clienteDto) throws ClienteAlreadyExistsException {
+    public Cliente darDeAltaCliente(ClienteDto clienteDto) throws ClienteAlreadyExistsException, DatosIncorrectosException {
         Cliente cliente = new Cliente(clienteDto);
 
-        if (clienteDao.find(cliente.getDni(), false) != null) {
+        if (clienteDao.find(cliente.getDni(), true) != null) {
             throw new ClienteAlreadyExistsException("Ya existe un cliente con DNI " + cliente.getDni());
         }
 
@@ -32,7 +33,7 @@ public class ClienteService {
         return cliente;
     }
 
-    public void agregarCuenta(Cuenta cuenta, long dniTitular) throws TipoCuentaAlreadyExistsException {
+    public void agregarCuenta(Cuenta cuenta, long dniTitular) throws TipoCuentaAlreadyExistsException, DatosIncorrectosException {
         Cliente titular = buscarClientePorDni(dniTitular);
         cuenta.setTitular(titular);
         if (titular.tieneCuenta(cuenta.getTipoCuenta(), cuenta.getMoneda())) {
