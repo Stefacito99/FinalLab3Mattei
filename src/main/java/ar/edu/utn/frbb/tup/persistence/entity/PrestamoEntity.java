@@ -1,51 +1,48 @@
-package ar.edu.utn.frbb.tup.model;
+package ar.edu.utn.frbb.tup.persistence.entity;
 
-import ar.edu.utn.frbb.tup.controller.dto.PrestamoDto;
+import ar.edu.utn.frbb.tup.model.Prestamo;
 import ar.edu.utn.frbb.tup.model.enums.TipoMoneda;
 
-public class Prestamo {
+public class PrestamoEntity {
     private long id;
     private long numeroCliente;
     private int plazoMeses;
     private double monto;
     private long montoConIntereses;
-    private long saldoRestante; // Saldo deudor a pagar
+    private long saldoRestante;
     private long valorCuota;
     private int cuotasPagas;
     private TipoMoneda moneda;
 
-    public Prestamo() {
+    public PrestamoEntity() {
     }
 
-    public Prestamo(long numeroCliente, int plazoMeses, double monto, TipoMoneda moneda) {
-        this.numeroCliente = numeroCliente;
-        this.plazoMeses = plazoMeses;
-        this.monto = monto;
-        this.montoConIntereses = (long) (monto * 1.1); // interés fijo del 10% con conversión a long para trabajar con valores enteros
-        this.valorCuota = (long) (this.montoConIntereses / this.plazoMeses); // Valor de la cuota fija
-        this.cuotasPagas = 0;
-        this.saldoRestante = this.montoConIntereses;
-        this.moneda = moneda;
+    public PrestamoEntity(Prestamo prestamo) {
+        this.id = prestamo.getId();
+        this.numeroCliente = prestamo.getNumeroCliente();
+        this.plazoMeses = prestamo.getPlazoMeses();
+        this.monto = prestamo.getMonto();
+        this.montoConIntereses = prestamo.getMontoConIntereses();
+        this.saldoRestante = prestamo.getSaldoRestante();
+        this.valorCuota = prestamo.getValorCuota();
+        this.cuotasPagas = prestamo.getCuotasPagas();
+        this.moneda = prestamo.getMoneda();
     }
 
-    public Prestamo(PrestamoDto prestamoDto) {
-        this(prestamoDto.getNumeroCliente(), prestamoDto.getPlazoMeses(), prestamoDto.getMonto(), prestamoDto.getMoneda());
-        this.montoConIntereses = (long) (prestamoDto.getMonto() * 1.05);
-        this.saldoRestante = this.montoConIntereses;
-        this.valorCuota = (long) (this.montoConIntereses / this.plazoMeses);
-        this.cuotasPagas = 0;
+    public Prestamo toPrestamo() {
+        Prestamo prestamo = new Prestamo();
+        prestamo.setId(this.id);
+        prestamo.setNumeroCliente(this.numeroCliente);
+        prestamo.setPlazoMeses(this.plazoMeses);
+        prestamo.setMonto(this.monto);
+        prestamo.setMontoConIntereses(this.montoConIntereses);
+        prestamo.setSaldoRestante(this.saldoRestante);
+        prestamo.setValorCuota(this.valorCuota);
+        prestamo.setCuotasPagas(this.cuotasPagas);
+        prestamo.setMoneda(this.moneda);
+        return prestamo;
     }
 
-    public void pagarCuota() {
-        this.saldoRestante = this.saldoRestante - this.valorCuota;
-        this.cuotasPagas++;
-    }
-
-    public boolean estaPagado() {
-        return cuotasPagas == plazoMeses || saldoRestante == 0;
-    }
-
-    // Getters y setters
     public long getId() {
         return id;
     }
@@ -117,4 +114,6 @@ public class Prestamo {
     public void setMoneda(TipoMoneda moneda) {
         this.moneda = moneda;
     }
+
+    
 }

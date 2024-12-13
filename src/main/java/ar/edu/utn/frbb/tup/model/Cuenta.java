@@ -32,6 +32,7 @@ public class Cuenta {
         this.fechaCreacion = LocalDateTime.now();
         this.balance = cuentaDto.getBalance();
         this.numeroCuenta = contadorCuentas++;
+        this.moneda = TipoMoneda.fromString(cuentaDto.getTipoMoneda());
         this.dniTitular = cuentaDto.getDniTitular();
     }
 
@@ -102,5 +103,13 @@ public class Cuenta {
 
     public void forzaDebitoDeCuenta(int cantidadADebitar) {
         this.balance = this.balance - cantidadADebitar;
+    }
+
+    public static long getContadorCuentas() {
+        return contadorCuentas;
+    }
+
+    public static void setContadorCuentas(long contadorCuentas) {
+        Cuenta.contadorCuentas = contadorCuentas;
     }
 }

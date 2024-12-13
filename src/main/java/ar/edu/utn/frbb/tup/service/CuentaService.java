@@ -1,38 +1,31 @@
 package ar.edu.utn.frbb.tup.service;
 
-import ar.edu.utn.frbb.tup.controller.dto.CuentaDto;
 import ar.edu.utn.frbb.tup.model.Cuenta;
-import ar.edu.utn.frbb.tup.model.exception.CuentaAlreadyExistsException;
-import ar.edu.utn.frbb.tup.model.exception.DatosIncorrectosException;
-import ar.edu.utn.frbb.tup.model.exception.TipoCuentaAlreadyExistsException;
 import ar.edu.utn.frbb.tup.persistence.CuentaDao;
+import ar.edu.utn.frbb.tup.model.exception.CuentaAlreadyExistsException;
+import ar.edu.utn.frbb.tup.model.exception.TipoCuentaAlreadyExistsException;
+import ar.edu.utn.frbb.tup.model.exception.DatosIncorrectosException;
+import ar.edu.utn.frbb.tup.controller.dto.CuentaDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-
-@Component
+@Service
 public class CuentaService {
-    CuentaDao cuentaDao = new CuentaDao();
 
     @Autowired
-    ClienteService clienteService;
+    private CuentaDao cuentaDao;
 
-    //Generar casos de test para darDeAltaCuenta
-    //    1 - cuenta existente
-    //    2 - cuenta no soportada
-    //    3 - cliente ya tiene cuenta de ese tipo
-    //    4 - cuenta creada exitosamente
+    @Autowired
+    private ClienteService clienteService;
+
     public Cuenta darDeAltaCuenta(CuentaDto cuentaDto) throws CuentaAlreadyExistsException, TipoCuentaAlreadyExistsException, DatosIncorrectosException {
-        
         Cuenta cuenta = new Cuenta(cuentaDto);
-        
-        if(cuentaDao.find(cuenta.getNumeroCuenta()) != null) {
+
+        if (cuentaDao.find(cuenta.getNumeroCuenta()) != null) {
             throw new CuentaAlreadyExistsException("La cuenta " + cuenta.getNumeroCuenta() + " ya existe.");
         }
 
-        //Chequear cuentas soportadas por el banco CA$ CC$ CAU$S
+        // Chequear cuentas soportadas por el banco CA$ CC$ CAU$S
         // if (!tipoCuentaEstaSoportada(cuenta)) {...}
 
         clienteService.agregarCuenta(cuenta, cuentaDto.getDniTitular());
@@ -42,5 +35,9 @@ public class CuentaService {
 
     public Cuenta find(long id) {
         return cuentaDao.find(id);
+    }
+
+    public void actualizarCuenta(Cuenta cuenta) {
+        cuentaDao.save(cuenta);
     }
 }

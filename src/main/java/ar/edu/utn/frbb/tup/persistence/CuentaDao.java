@@ -1,7 +1,6 @@
 package ar.edu.utn.frbb.tup.persistence;
 
 import ar.edu.utn.frbb.tup.model.Cuenta;
-import ar.edu.utn.frbb.tup.persistence.entity.ClienteEntity;
 import ar.edu.utn.frbb.tup.persistence.entity.CuentaEntity;
 import org.springframework.stereotype.Component;
 
@@ -9,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class CuentaDao  extends AbstractBaseDao{
+public class CuentaDao extends AbstractBaseDao {
     @Override
     protected String getEntityName() {
         return "CUENTA";
@@ -29,10 +28,9 @@ public class CuentaDao  extends AbstractBaseDao{
 
     public List<Cuenta> getCuentasByCliente(long dni) {
         List<Cuenta> cuentasDelCliente = new ArrayList<>();
-        for (Object object:
-                getInMemoryDatabase().values()) {
+        for (Object object : getInMemoryDatabase().values()) {
             CuentaEntity cuenta = ((CuentaEntity) object);
-            if (cuenta.getTitular().equals(dni)) {
+            if (cuenta.getDniTitular().equals(dni)) {
                 cuentasDelCliente.add(cuenta.toCuenta());
             }
         }

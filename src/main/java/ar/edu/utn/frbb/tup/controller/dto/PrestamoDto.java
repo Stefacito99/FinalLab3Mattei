@@ -1,80 +1,44 @@
 package ar.edu.utn.frbb.tup.controller.dto;
 
+import ar.edu.utn.frbb.tup.model.enums.TipoMoneda;
+
 public class PrestamoDto {
-
-    private Long id;
-    private Double monto;
-    private Integer cantidadCuotas;
-    private Double tasaInteres;
-    private ClienteDto cliente;
-
+    private double monto;
+    private int plazoMeses;
+    private long numeroCliente;
+    private TipoMoneda moneda;
+    
+    public PrestamoDto(double monto, int plazoMeses, long numeroCliente, TipoMoneda moneda) {
+        this.monto = monto;
+        this.plazoMeses = plazoMeses;
+        this.numeroCliente = numeroCliente;
+        this.moneda = moneda;
+    }
     public PrestamoDto() {
     }
-
-    public PrestamoDto(Double monto, Integer cantidadCuotas, Double tasaInteres, ClienteDto cliente) {
-        this.monto = monto;
-        this.cantidadCuotas = cantidadCuotas;
-        this.tasaInteres = tasaInteres;
-        this.cliente = cliente;
-    }
-
-    public PrestamoDto(Long id, Double monto, Integer cantidadCuotas, Double tasaInteres, ClienteDto cliente) {
-        this.id = id;
-        this.monto = monto;
-        this.cantidadCuotas = cantidadCuotas;
-        this.tasaInteres = tasaInteres;
-        this.cliente = cliente;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Double getMonto() {
+    public double getMonto() {
         return monto;
     }
-
-    public void setMonto(Double monto) {
+    public void setMonto(double monto) {
         this.monto = monto;
     }
-
-    public Integer getCantidadCuotas() {
-        return cantidadCuotas;
+    public int getPlazoMeses() {
+        return plazoMeses;
     }
-
-    public void setCantidadCuotas(Integer cantidadCuotas) {
-        this.cantidadCuotas = cantidadCuotas;
+    public void setPlazoMeses(int plazoMeses) {
+        this.plazoMeses = plazoMeses;
     }
-
-    public Double getTasaInteres() {
-        return tasaInteres;
+    public long getNumeroCliente() {
+        return numeroCliente;
     }
-
-    public void setTasaInteres(Double tasaInteres) {
-        this.tasaInteres = tasaInteres;
+    public void setNumeroCliente(long numeroCliente) {
+        this.numeroCliente = numeroCliente;
     }
-
-    public ClienteDto getCliente() {
-        return cliente;
+    public TipoMoneda getMoneda() {
+        return moneda;
     }
-
-    public void setCliente(ClienteDto cliente) {
-        this.cliente = cliente;
+    public void setMoneda(TipoMoneda moneda) {
+        this.moneda = moneda;
     }
-
-    @Override
-    public String toString() {
-        return "PrestamoDto{" +
-                "id=" + id +
-                ", monto=" + monto +
-                ", cantidadCuotas=" + cantidadCuotas +
-                ", tasaInteres=" + tasaInteres +
-                ", cliente=" + cliente +
-                '}';
-    }
-    
 }
+

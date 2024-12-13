@@ -1,45 +1,41 @@
 package ar.edu.utn.frbb.tup.persistence.entity;
 
-import ar.edu.utn.frbb.tup.model.Cliente;
 import ar.edu.utn.frbb.tup.model.Cuenta;
 import ar.edu.utn.frbb.tup.model.enums.TipoCuenta;
-import ar.edu.utn.frbb.tup.persistence.ClienteDao;
+import ar.edu.utn.frbb.tup.model.enums.TipoMoneda;
 
 import java.time.LocalDateTime;
 
-public class CuentaEntity extends BaseEntity{
-    String nombre;
-    LocalDateTime fechaCreacion;
-    double balance;
-    String tipoCuenta;
-    Long titular;
-    long numeroCuenta;
+public class CuentaEntity extends BaseEntity {
+    private LocalDateTime fechaCreacion;
+    private double balance;
+    private String tipoCuenta;
+    private Long dniTitular;
+    private long numeroCuenta;
+    private TipoMoneda tipoMoneda;
 
     public CuentaEntity(Cuenta cuenta) {
         super(cuenta.getNumeroCuenta());
+        this.numeroCuenta = cuenta.getNumeroCuenta();
         this.balance = cuenta.getBalance();
         this.tipoCuenta = cuenta.getTipoCuenta().toString();
-        this.titular = cuenta.getDniTitular();
+        this.dniTitular = cuenta.getDniTitular();
         this.fechaCreacion = cuenta.getFechaCreacion();
+        this.tipoMoneda = cuenta.getMoneda();
     }
 
     public Cuenta toCuenta() {
         Cuenta cuenta = new Cuenta();
-        cuenta.setBalance(this.balance);
         cuenta.setNumeroCuenta(this.numeroCuenta);
+        cuenta.setBalance(this.balance);
         cuenta.setTipoCuenta(TipoCuenta.valueOf(this.tipoCuenta));
         cuenta.setFechaCreacion(this.fechaCreacion);
+        cuenta.setDniTitular(this.dniTitular);
+        cuenta.setMoneda(this.tipoMoneda);
         return cuenta;
     }
 
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
+    // Getters y setters
     public LocalDateTime getFechaCreacion() {
         return fechaCreacion;
     }
@@ -64,12 +60,12 @@ public class CuentaEntity extends BaseEntity{
         this.tipoCuenta = tipoCuenta;
     }
 
-    public Long getTitular() {
-        return titular;
+    public Long getDniTitular() {
+        return dniTitular;
     }
 
-    public void setTitular(Long titular) {
-        this.titular = titular;
+    public void setDniTitular(Long dniTitular) {
+        this.dniTitular = dniTitular;
     }
 
     public long getNumeroCuenta() {
@@ -78,5 +74,13 @@ public class CuentaEntity extends BaseEntity{
 
     public void setNumeroCuenta(long numeroCuenta) {
         this.numeroCuenta = numeroCuenta;
+    }
+
+    public TipoMoneda getTipoMoneda() {
+        return tipoMoneda;
+    }
+
+    public void setTipoMoneda(TipoMoneda tipoMoneda) {
+        this.tipoMoneda = tipoMoneda;
     }
 }
