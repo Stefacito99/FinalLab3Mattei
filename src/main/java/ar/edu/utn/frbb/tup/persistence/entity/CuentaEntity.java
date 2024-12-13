@@ -3,10 +3,12 @@ package ar.edu.utn.frbb.tup.persistence.entity;
 import ar.edu.utn.frbb.tup.model.Cuenta;
 import ar.edu.utn.frbb.tup.model.enums.TipoCuenta;
 import ar.edu.utn.frbb.tup.model.enums.TipoMoneda;
-
 import java.time.LocalDateTime;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class CuentaEntity extends BaseEntity {
+    private static final AtomicLong ID_GENERATOR = new AtomicLong(1);
+
     private LocalDateTime fechaCreacion;
     private double balance;
     private String tipoCuenta;
@@ -14,8 +16,12 @@ public class CuentaEntity extends BaseEntity {
     private long numeroCuenta;
     private TipoMoneda tipoMoneda;
 
+    public CuentaEntity() {
+        super(ID_GENERATOR.getAndIncrement());
+    }
+
     public CuentaEntity(Cuenta cuenta) {
-        super(cuenta.getNumeroCuenta());
+        super(cuenta.getNumeroCuenta() > 0 ? cuenta.getNumeroCuenta() : ID_GENERATOR.getAndIncrement());
         this.numeroCuenta = cuenta.getNumeroCuenta();
         this.balance = cuenta.getBalance();
         this.tipoCuenta = cuenta.getTipoCuenta().toString();

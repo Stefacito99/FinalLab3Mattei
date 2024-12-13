@@ -30,10 +30,20 @@ public class CuentaDao extends AbstractBaseDao {
         List<Cuenta> cuentasDelCliente = new ArrayList<>();
         for (Object object : getInMemoryDatabase().values()) {
             CuentaEntity cuenta = ((CuentaEntity) object);
-            if (cuenta.getDniTitular().equals(dni)) {
+            if (cuenta.getDniTitular() == dni) {
                 cuentasDelCliente.add(cuenta.toCuenta());
             }
         }
         return cuentasDelCliente;
+    }
+
+    public List<Cuenta> getAllCuentas() {
+        List<Cuenta> cuentas = new ArrayList<>();
+        for (Object object : getInMemoryDatabase().values()) {
+            CuentaEntity cuenta = ((CuentaEntity) object);
+            cuentas.add(cuenta.toCuenta());
+            System.out.println("Cuenta: " + cuenta.getNumeroCuenta() + ", Moneda: " + cuenta.getTipoMoneda().getDescripcion());
+        }
+        return cuentas;
     }
 }

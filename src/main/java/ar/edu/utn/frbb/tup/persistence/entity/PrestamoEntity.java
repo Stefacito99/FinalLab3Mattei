@@ -3,22 +3,26 @@ package ar.edu.utn.frbb.tup.persistence.entity;
 import ar.edu.utn.frbb.tup.model.Prestamo;
 import ar.edu.utn.frbb.tup.model.enums.TipoMoneda;
 
-public class PrestamoEntity {
-    private long id;
+import java.util.concurrent.atomic.AtomicLong;
+
+public class PrestamoEntity extends BaseEntity {
+    private static final AtomicLong ID_GENERATOR = new AtomicLong(1);
+
     private long numeroCliente;
     private int plazoMeses;
     private double monto;
-    private long montoConIntereses;
-    private long saldoRestante;
-    private long valorCuota;
+    private double montoConIntereses;
+    private double saldoRestante;
+    private double valorCuota;
     private int cuotasPagas;
     private TipoMoneda moneda;
 
     public PrestamoEntity() {
+        super(ID_GENERATOR.getAndIncrement());
     }
 
     public PrestamoEntity(Prestamo prestamo) {
-        this.id = prestamo.getId();
+        super(prestamo.getId() > 0 ? prestamo.getId() : ID_GENERATOR.getAndIncrement());
         this.numeroCliente = prestamo.getNumeroCliente();
         this.plazoMeses = prestamo.getPlazoMeses();
         this.monto = prestamo.getMonto();
@@ -31,7 +35,7 @@ public class PrestamoEntity {
 
     public Prestamo toPrestamo() {
         Prestamo prestamo = new Prestamo();
-        prestamo.setId(this.id);
+        prestamo.setId(this.getId());
         prestamo.setNumeroCliente(this.numeroCliente);
         prestamo.setPlazoMeses(this.plazoMeses);
         prestamo.setMonto(this.monto);
@@ -43,14 +47,7 @@ public class PrestamoEntity {
         return prestamo;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
+    // Getters y setters
     public long getNumeroCliente() {
         return numeroCliente;
     }
@@ -75,27 +72,27 @@ public class PrestamoEntity {
         this.monto = monto;
     }
 
-    public long getMontoConIntereses() {
+    public double getMontoConIntereses() {
         return montoConIntereses;
     }
 
-    public void setMontoConIntereses(long montoConIntereses) {
+    public void setMontoConIntereses(double montoConIntereses) {
         this.montoConIntereses = montoConIntereses;
     }
 
-    public long getSaldoRestante() {
+    public double getSaldoRestante() {
         return saldoRestante;
     }
 
-    public void setSaldoRestante(long saldoRestante) {
+    public void setSaldoRestante(double saldoRestante) {
         this.saldoRestante = saldoRestante;
     }
 
-    public long getValorCuota() {
+    public double getValorCuota() {
         return valorCuota;
     }
 
-    public void setValorCuota(long valorCuota) {
+    public void setValorCuota(double valorCuota) {
         this.valorCuota = valorCuota;
     }
 
@@ -114,6 +111,4 @@ public class PrestamoEntity {
     public void setMoneda(TipoMoneda moneda) {
         this.moneda = moneda;
     }
-
-    
 }

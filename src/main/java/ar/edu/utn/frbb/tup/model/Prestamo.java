@@ -3,46 +3,45 @@ package ar.edu.utn.frbb.tup.model;
 import ar.edu.utn.frbb.tup.controller.dto.PrestamoDto;
 import ar.edu.utn.frbb.tup.model.enums.TipoMoneda;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 public class Prestamo {
+    private static final AtomicLong ID_GENERATOR = new AtomicLong(1);
+
     private long id;
     private long numeroCliente;
     private int plazoMeses;
     private double monto;
-    private long montoConIntereses;
-    private long saldoRestante; // Saldo deudor a pagar
-    private long valorCuota;
+    private double montoConIntereses;
+    private double saldoRestante;
+    private double valorCuota;
     private int cuotasPagas;
     private TipoMoneda moneda;
 
     public Prestamo() {
-    }
-
-    public Prestamo(long numeroCliente, int plazoMeses, double monto, TipoMoneda moneda) {
-        this.numeroCliente = numeroCliente;
-        this.plazoMeses = plazoMeses;
-        this.monto = monto;
-        this.montoConIntereses = (long) (monto * 1.1); // interés fijo del 10% con conversión a long para trabajar con valores enteros
-        this.valorCuota = (long) (this.montoConIntereses / this.plazoMeses); // Valor de la cuota fija
-        this.cuotasPagas = 0;
-        this.saldoRestante = this.montoConIntereses;
-        this.moneda = moneda;
+        this.id = ID_GENERATOR.getAndIncrement();
     }
 
     public Prestamo(PrestamoDto prestamoDto) {
-        this(prestamoDto.getNumeroCliente(), prestamoDto.getPlazoMeses(), prestamoDto.getMonto(), prestamoDto.getMoneda());
-        this.montoConIntereses = (long) (prestamoDto.getMonto() * 1.05);
+        this();
+        this.numeroCliente = prestamoDto.getNumeroCliente();
+        this.plazoMeses = prestamoDto.getPlazoMeses();
+        this.monto = prestamoDto.getMonto();
+        this.moneda = TipoMoneda.fromString(prestamoDto.getMoneda());
+        this.montoConIntereses = calcularMontoConIntereses();
         this.saldoRestante = this.montoConIntereses;
-        this.valorCuota = (long) (this.montoConIntereses / this.plazoMeses);
+        this.valorCuota = calcularValorCuota();
         this.cuotasPagas = 0;
     }
 
-    public void pagarCuota() {
-        this.saldoRestante = this.saldoRestante - this.valorCuota;
-        this.cuotasPagas++;
+    private double calcularMontoConIntereses() {
+        // Implementar lógica para calcular el monto con intereses
+        return this.monto * 1.1; // Ejemplo: 10% de interés
     }
 
-    public boolean estaPagado() {
-        return cuotasPagas == plazoMeses || saldoRestante == 0;
+    private double calcularValorCuota() {
+        // Implementar lógica para calcular el valor de la cuota
+        return this.montoConIntereses / this.plazoMeses;
     }
 
     // Getters y setters
@@ -78,27 +77,27 @@ public class Prestamo {
         this.monto = monto;
     }
 
-    public long getMontoConIntereses() {
+    public double getMontoConIntereses() {
         return montoConIntereses;
     }
 
-    public void setMontoConIntereses(long montoConIntereses) {
+    public void setMontoConIntereses(double montoConIntereses) {
         this.montoConIntereses = montoConIntereses;
     }
 
-    public long getSaldoRestante() {
+    public double getSaldoRestante() {
         return saldoRestante;
     }
 
-    public void setSaldoRestante(long saldoRestante) {
+    public void setSaldoRestante(double saldoRestante) {
         this.saldoRestante = saldoRestante;
     }
 
-    public long getValorCuota() {
+    public double getValorCuota() {
         return valorCuota;
     }
 
-    public void setValorCuota(long valorCuota) {
+    public void setValorCuota(double valorCuota) {
         this.valorCuota = valorCuota;
     }
 

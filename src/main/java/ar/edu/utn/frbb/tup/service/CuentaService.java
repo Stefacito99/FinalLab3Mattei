@@ -6,6 +6,9 @@ import ar.edu.utn.frbb.tup.model.exception.CuentaAlreadyExistsException;
 import ar.edu.utn.frbb.tup.model.exception.TipoCuentaAlreadyExistsException;
 import ar.edu.utn.frbb.tup.model.exception.DatosIncorrectosException;
 import ar.edu.utn.frbb.tup.controller.dto.CuentaDto;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +38,10 @@ public class CuentaService {
 
     public Cuenta find(long id) {
         return cuentaDao.find(id);
+    }
+
+    public List<Cuenta> getCuentasByCliente(long numeroCliente) {
+        return cuentaDao.getCuentasByCliente(numeroCliente);
     }
 
     public void actualizarCuenta(Cuenta cuenta) {

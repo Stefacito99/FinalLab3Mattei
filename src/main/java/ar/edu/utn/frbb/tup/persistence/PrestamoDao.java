@@ -4,6 +4,9 @@ import ar.edu.utn.frbb.tup.model.Prestamo;
 import ar.edu.utn.frbb.tup.persistence.entity.PrestamoEntity;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Repository
 public class PrestamoDao extends AbstractBaseDao {
 
@@ -21,6 +24,12 @@ public class PrestamoDao extends AbstractBaseDao {
     public void save(Prestamo prestamo) {
         PrestamoEntity prestamoEntity = new PrestamoEntity(prestamo);
         getInMemoryDatabase().put(prestamoEntity.getId(), prestamoEntity);
+    }
+
+    public List<Prestamo> findAll() {
+        return getInMemoryDatabase().values().stream()
+                .map(entity -> ((PrestamoEntity) entity).toPrestamo())
+                .collect(Collectors.toList());
     }
 
     @Override
