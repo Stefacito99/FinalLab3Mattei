@@ -13,5 +13,11 @@ public class CuentaValidator {
         if (!"P".equals(cuentaDto.getTipoMoneda()) && !"D".equals(cuentaDto.getTipoMoneda())) {
             throw new IllegalArgumentException("El tipo de moneda no es correcto");
         }
+        if (cuentaDto.getBalance() < 0) {
+            throw new IllegalArgumentException("El balance no puede ser negativo");
+        }
+        if (cuentaDto.getDniTitular() <= 0) {
+            throw new IllegalArgumentException("El DNI del titular no es válido");
+        }
     }
 }

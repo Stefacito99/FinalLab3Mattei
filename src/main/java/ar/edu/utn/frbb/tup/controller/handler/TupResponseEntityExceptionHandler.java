@@ -1,7 +1,8 @@
 package ar.edu.utn.frbb.tup.controller.handler;
 
+import ar.edu.utn.frbb.tup.model.exception.ClienteAlreadyExistsException;
+import ar.edu.utn.frbb.tup.model.exception.ClienteNotFoundException;
 import ar.edu.utn.frbb.tup.model.exception.DatosIncorrectosException;
-import ar.edu.utn.frbb.tup.model.exception.TipoCuentaAlreadyExistsException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -15,48 +16,42 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class TupResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(value
-            = {TipoCuentaAlreadyExistsException.class, IllegalArgumentException.class})
-    protected ResponseEntity<Object> handleMateriaNotFound(
-            Exception ex, WebRequest request) {
-        String exceptionMessage = ex.getMessage();
-        CustomApiError error = new CustomApiError();
-        error.setErrorMessage(exceptionMessage);
-        return handleExceptionInternal(ex, error,
-                new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    @ExceptionHandler({ClienteAlreadyExistsException.class})
+    protected ResponseEntity<Object> handleClienteAlreadyExists(Exception ex, WebRequest request) {
+        CustomApiError error = new CustomApiError(HttpStatus.CONFLICT, ex.getMessage());
+        return new ResponseEntity<>(error, new HttpHeaders(), error.getErrorCode());
     }
 
-    @ExceptionHandler(value
-            = { IllegalStateException.class })
-    protected ResponseEntity<Object> handleConflict(
-            RuntimeException ex, WebRequest request) {
-        String exceptionMessage = ex.getMessage();
-        CustomApiError error = new CustomApiError();
-        error.setErrorCode(1234);
-        error.setErrorMessage(exceptionMessage);
-        return handleExceptionInternal(ex, error,
-                new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    @ExceptionHandler({ClienteNotFoundException.class})
+    protected ResponseEntity<Object> handleClienteNotFound(Exception ex, WebRequest request) {
+        CustomApiError error = new CustomApiError(HttpStatus.NOT_FOUND, ex.getMessage());
+        return new ResponseEntity<>(error, new HttpHeaders(), error.getErrorCode());
     }
 
     @ExceptionHandler({DatosIncorrectosException.class})
-    protected ResponseEntity<Object> handleNoSoportada(
-            Exception ex, WebRequest request) {
-        CustomApiError error = new CustomApiError();
-        error.setErrorMessage(ex.getMessage());
-        return handleExceptionInternal(ex, error,
-                new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    protected ResponseEntity<Object> handleDatosIncorrectos(Exception ex, WebRequest request) {
+        CustomApiError error = new CustomApiError(HttpStatus.BAD_REQUEST, ex.getMessage());
+        return new ResponseEntity<>(error, new HttpHeaders(), error.getErrorCode());
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @ExceptionHandler({IllegalArgumentException.class})
+    protected ResponseEntity<Object> handleIllegalArgumentException(Exception ex, WebRequest request) {
+        CustomApiError error = new CustomApiError(HttpStatus.BAD_REQUEST, ex.getMessage());
+        return new ResponseEntity<>(error, new HttpHeaders(), error.getErrorCode());
+    }
+
+    private ResponseEntity<Object> buildResponseEntity(CustomApiError error) {
+        return new ResponseEntity<>(error, new HttpHeaders(), error.getErrorCode());
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         if (body == null) {
-            CustomApiError error = new CustomApiError();
-            error.setErrorMessage(ex.getMessage());
-            body = error;
+            body = new CustomApiError(HttpStatus.valueOf(status.value()), ex.getMessage());
+        } else if (body instanceof String) {
+            body = new CustomApiError(HttpStatus.valueOf(status.value()), (String) body);
         }
-
         return new ResponseEntity(body, headers, status);
     }
-
 }

@@ -3,8 +3,6 @@ package ar.edu.utn.frbb.tup.persistence.entity;
 import ar.edu.utn.frbb.tup.model.Cliente;
 import ar.edu.utn.frbb.tup.model.Cuenta;
 import ar.edu.utn.frbb.tup.model.enums.TipoPersona;
-import ar.edu.utn.frbb.tup.persistence.CuentaDao;
-import ar.edu.utn.frbb.tup.persistence.entity.BaseEntity;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -36,7 +34,6 @@ public class ClienteEntity extends BaseEntity {
         }
     }
 
-
     public Cliente toCliente() {
         Cliente cliente = new Cliente();
         cliente.setDni(this.getId());
@@ -48,5 +45,41 @@ public class ClienteEntity extends BaseEntity {
         cliente.setBanco(this.banco);
 
         return cliente;
+    }
+
+    public String getTipoPersona() {
+        return tipoPersona;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public LocalDate getFechaAlta() {
+        return fechaAlta;
+    }
+
+    public LocalDate getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public String getBanco() {
+        return banco;
+    }
+
+    public void setBanco(String banco) {
+        this.banco = banco;
+    }
+
+    public List<Long> getCuentas() {
+        return cuentas;
+    }
+
+    public void setCuentas(List<Long> cuentas) {
+        this.cuentas = cuentas;
     }
 }

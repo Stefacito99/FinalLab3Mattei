@@ -3,25 +3,26 @@ package ar.edu.utn.frbb.tup.service;
 import ar.edu.utn.frbb.tup.controller.dto.ClienteDto;
 import ar.edu.utn.frbb.tup.model.Cliente;
 import ar.edu.utn.frbb.tup.model.Cuenta;
+import ar.edu.utn.frbb.tup.model.enums.TipoCuenta;
+import ar.edu.utn.frbb.tup.model.enums.TipoMoneda;
 import ar.edu.utn.frbb.tup.model.exception.ClienteAlreadyExistsException;
+import ar.edu.utn.frbb.tup.model.exception.ClienteNotFoundException;
 import ar.edu.utn.frbb.tup.model.exception.DatosIncorrectosException;
 import ar.edu.utn.frbb.tup.model.exception.TipoCuentaAlreadyExistsException;
 import ar.edu.utn.frbb.tup.persistence.ClienteDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ClienteService {
 
-    ClienteDao clienteDao;
-
-    public ClienteService(ClienteDao clienteDao) {
-        this.clienteDao = clienteDao;
-    }
+    @Autowired
+    private ClienteDao clienteDao;
 
     public Cliente darDeAltaCliente(ClienteDto clienteDto) throws ClienteAlreadyExistsException, DatosIncorrectosException {
         Cliente cliente = new Cliente(clienteDto);
 
-        if (clienteDao.find(cliente.getDni(), true) != null) {
+        if (clienteDao.find(cliente.getDni()) != null) {
             throw new ClienteAlreadyExistsException("Ya existe un cliente con DNI " + cliente.getDni());
         }
 
@@ -33,20 +34,23 @@ public class ClienteService {
         return cliente;
     }
 
-    public void agregarCuenta(Cuenta cuenta, long dniTitular) throws TipoCuentaAlreadyExistsException, DatosIncorrectosException {
+    public void agregarCuenta(Cuenta cuenta, long dniTitular) throws TipoCuentaAlreadyExistsException, DatosIncorrectosException, ClienteNotFoundException {
         Cliente titular = buscarClientePorDni(dniTitular);
         cuenta.setDniTitular(titular.getDni());
+
+        // Verificar si el cliente ya tiene una cuenta del mismo tipo y moneda
         if (titular.tieneCuenta(cuenta.getTipoCuenta(), cuenta.getMoneda())) {
-            throw new TipoCuentaAlreadyExistsException("El cliente ya posee una cuenta de ese tipo y moneda");
+            throw new TipoCuentaAlreadyExistsException("El cliente ya posee una cuenta de tipo " + cuenta.getTipoCuenta() + " y moneda " + cuenta.getMoneda());
         }
+
         titular.addCuenta(cuenta);
         clienteDao.save(titular);
     }
 
-    public Cliente buscarClientePorDni(long dni) {
-        Cliente cliente = clienteDao.find(dni, true);
-        if(cliente == null) {
-            throw new IllegalArgumentException("El cliente no existe");
+    public Cliente buscarClientePorDni(long dni) throws ClienteNotFoundException {
+        Cliente cliente = clienteDao.find(dni);
+        if (cliente == null) {
+            throw new ClienteNotFoundException("El cliente no existe");
         }
         return cliente;
     }

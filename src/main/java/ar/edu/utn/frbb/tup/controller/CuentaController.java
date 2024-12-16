@@ -13,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 import ar.edu.utn.frbb.tup.controller.dto.CuentaDto;
 import ar.edu.utn.frbb.tup.controller.validator.CuentaValidator;
 import ar.edu.utn.frbb.tup.model.Cuenta;
+import ar.edu.utn.frbb.tup.model.exception.ClienteNotFoundException;
 import ar.edu.utn.frbb.tup.model.exception.CuentaAlreadyExistsException;
 import ar.edu.utn.frbb.tup.model.exception.DatosIncorrectosException;
 import ar.edu.utn.frbb.tup.model.exception.TipoCuentaAlreadyExistsException;
@@ -27,7 +28,7 @@ public class CuentaController {
     private CuentaValidator cuentaValidator;
 
     @PostMapping
-    public Cuenta crearCuenta(@RequestBody CuentaDto cuentaDto) throws CuentaAlreadyExistsException, TipoCuentaAlreadyExistsException, DatosIncorrectosException {
+    public Cuenta crearCuenta(@RequestBody CuentaDto cuentaDto) throws CuentaAlreadyExistsException, TipoCuentaAlreadyExistsException, DatosIncorrectosException, ClienteNotFoundException {
         cuentaValidator.validate(cuentaDto);
 
         Cuenta cuenta = cuentaService.darDeAltaCuenta(cuentaDto);        

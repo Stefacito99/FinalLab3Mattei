@@ -1,32 +1,69 @@
 package ar.edu.utn.frbb.tup.model;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.HashSet;
 import java.util.Set;
 
 import ar.edu.utn.frbb.tup.controller.dto.ClienteDto;
-import ar.edu.utn.frbb.tup.model.enums.TipoPersona;
 import ar.edu.utn.frbb.tup.model.enums.TipoCuenta;
 import ar.edu.utn.frbb.tup.model.enums.TipoMoneda;
+import ar.edu.utn.frbb.tup.model.enums.TipoPersona;
 
-public class Cliente extends Persona{
-
+public class Cliente {
+    private long dni;
+    private String nombre;
+    private String apellido;
+    private LocalDate fechaNacimiento;
     private TipoPersona tipoPersona;
     private String banco;
     private LocalDate fechaAlta;
     private Set<Cuenta> cuentas = new HashSet<>();
 
     public Cliente() {
-        super();
+        this.fechaAlta = LocalDate.now();
     }
-    
+
     public Cliente(ClienteDto clienteDto) {
-        super(clienteDto.getDni(), clienteDto.getApellido(), clienteDto.getNombre(), clienteDto.getFechaNacimiento());
-        fechaAlta = LocalDate.now();
-        banco = clienteDto.getBanco();
-
+        this.dni = clienteDto.getDni();
+        this.nombre = clienteDto.getNombre();
+        this.apellido = clienteDto.getApellido();
+        this.fechaNacimiento = LocalDate.parse(clienteDto.getFechaNacimiento());
         this.tipoPersona = TipoPersona.fromString(clienteDto.getTipoPersona());
+        this.banco = clienteDto.getBanco();
+        this.fechaAlta = LocalDate.now();
+    }
 
+    public long getDni() {
+        return dni;
+    }
+
+    public void setDni(long dni) {
+        this.dni = dni;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
+    public LocalDate getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public void setFechaNacimiento(LocalDate fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
     }
 
     public TipoPersona getTipoPersona() {
@@ -57,13 +94,16 @@ public class Cliente extends Persona{
         return cuentas;
     }
 
+    public void setCuentas(Set<Cuenta> cuentas) {
+        this.cuentas = cuentas;
+    }
+
     public void addCuenta(Cuenta cuenta) {
         this.cuentas.add(cuenta);
     }
 
     public boolean tieneCuenta(TipoCuenta tipoCuenta, TipoMoneda moneda) {
-        for (Cuenta cuenta:
-                cuentas) {
+        for (Cuenta cuenta : cuentas) {
             if (tipoCuenta.equals(cuenta.getTipoCuenta()) && moneda.equals(cuenta.getMoneda())) {
                 return true;
             }
@@ -71,10 +111,18 @@ public class Cliente extends Persona{
         return false;
     }
 
+    public int getEdad() {
+        return Period.between(this.fechaNacimiento, LocalDate.now()).getYears();
+    }
+
     @Override
     public String toString() {
         return "Cliente{" +
-                "tipoPersona=" + tipoPersona +
+                "dni=" + dni +
+                ", nombre='" + nombre + '\'' +
+                ", apellido='" + apellido + '\'' +
+                ", fechaNacimiento=" + fechaNacimiento +
+                ", tipoPersona=" + tipoPersona +
                 ", banco='" + banco + '\'' +
                 ", fechaAlta=" + fechaAlta +
                 ", cuentas=" + cuentas +

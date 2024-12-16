@@ -1,16 +1,20 @@
 package ar.edu.utn.frbb.tup.controller.handler;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(JsonInclude.Include.NON_NULL)
+import org.springframework.http.HttpStatus;
+
 public class CustomApiError {
-    private Integer errorCode;
+    private int errorCode;
     private String errorMessage;
 
+    public CustomApiError() {
+    }
 
+    public CustomApiError(HttpStatus status, String errorMessage) {
+        this.errorCode = status.value();
+        this.errorMessage = errorMessage;
+    }
 
-    public Integer getErrorCode() {
+    public int getErrorCode() {
         return errorCode;
     }
 
@@ -26,4 +30,3 @@ public class CustomApiError {
         this.errorMessage = errorMessage;
     }
 }
-
