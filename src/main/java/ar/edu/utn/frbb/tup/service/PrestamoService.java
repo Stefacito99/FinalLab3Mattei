@@ -76,13 +76,13 @@ public class PrestamoService {
         if (prestamo == null) {
             throw new PrestamoNotFoundException("Préstamo no encontrado.");
         }
-
+    
         Cliente cliente = clienteService.buscarClientePorDni(prestamo.getDniTitular());
         Cuenta cuenta = cliente.getCuentas().stream()
                 .filter(c -> c.getMoneda().equals(prestamo.getMoneda()))
                 .findFirst()
                 .orElseThrow(() -> new CuentaNotFoundException("Cuenta no encontrada."));
-
+    
         int cuotaMensual = prestamo.getCuotaMensual();
         if (monto != cuotaMensual) {
             throw new DatosIncorrectosException("El monto de la cuota no es correcto.");
@@ -90,14 +90,15 @@ public class PrestamoService {
         if (cuenta.getBalance() < monto) {
             throw new NoAlcanzaException("No hay suficiente saldo en la cuenta para pagar la cuota.");
         }
-
+    
+        // Solo se realizan modificaciones si hay suficiente saldo
         cuenta.setBalance(cuenta.getBalance() - monto);
         cuentaService.actualizarCuenta(cuenta);
-
+    
         prestamo.setCuotasPagadas(prestamo.getCuotasPagadas() + 1);
         prestamo.actualizarMontoFaltanteAPagar();
-        prestamoDao.save(prestamo);
-
+        prestamoDao.actualizar(prestamo);
+    
         return prestamo;
     }
 

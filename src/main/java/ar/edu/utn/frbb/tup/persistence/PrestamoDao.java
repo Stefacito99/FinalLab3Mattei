@@ -33,4 +33,9 @@ public class PrestamoDao extends AbstractBaseDao {
                 .map(PrestamoEntity::toPrestamo)
                 .collect(Collectors.toList());
     }
+
+    public void actualizar(Prestamo prestamo) {
+        PrestamoEntity entity = new PrestamoEntity(prestamo);
+        database.put(prestamo.getNumeroPrestamo(), entity);
+    }
 }

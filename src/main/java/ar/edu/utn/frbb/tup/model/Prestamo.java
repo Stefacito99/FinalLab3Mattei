@@ -121,12 +121,8 @@ public class Prestamo {
         return cuotaMensual;
     }
 
-    public int getMontoFaltanteAPagar() {
-        return montoFaltanteAPagar;
-    }
-
     private void calcularPlanDePagos() {
-        double tasaInteresAnual = 0.05;
+        double tasaInteresAnual = 0.10;
         double tasaInteresMensual = tasaInteresAnual / 12;
         this.montoTotal = (int) Math.round(this.monto * Math.pow(1 + tasaInteresMensual, this.plazoMeses));
         this.cuotaMensual = (int) Math.round((double) this.montoTotal / this.plazoMeses);
@@ -135,5 +131,10 @@ public class Prestamo {
 
     public void actualizarMontoFaltanteAPagar() {
         this.montoFaltanteAPagar = this.montoTotal - (this.cuotasPagadas * this.cuotaMensual);
+    }
+
+    public int getMontoFaltanteAPagar() {
+        actualizarMontoFaltanteAPagar();
+        return montoFaltanteAPagar;
     }
 }

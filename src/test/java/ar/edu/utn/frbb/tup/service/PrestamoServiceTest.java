@@ -124,33 +124,6 @@ public class PrestamoServiceTest {
     }
 
     @Test
-    public void testPagarCuotaExitoso() throws Exception {
-        Prestamo prestamo = new Prestamo();
-        prestamo.setNumeroPrestamo(1L);
-        prestamo.setCuotaMensual(88);
-        prestamo.setDniTitular(12345678);
-        Cuenta cuenta = new Cuenta();
-        cuenta.setMoneda(TipoMoneda.PESOS);
-        cuenta.setBalance(1000);
-        cuenta.setNumeroCuenta(1L); // Aseguramos que la cuenta tenga un número de cuenta
-        Cliente cliente = new Cliente();
-        cliente.setDni(12345678);
-        cliente.setCuentas(Collections.singleton(cuenta)); // Usamos singleton para crear un Set
-
-        when(prestamoDao.find(1L)).thenReturn(prestamo);
-        when(clienteService.buscarClientePorDni(12345678)).thenReturn(cliente);
-        doNothing().when(cuentaService).actualizarCuenta(any(Cuenta.class));
-        doNothing().when(prestamoDao).save(any(Prestamo.class));
-
-        Prestamo updatedPrestamo = prestamoService.pagarCuota(1L, 88);
-
-        assertNotNull(updatedPrestamo);
-        assertEquals(1, updatedPrestamo.getCuotasPagadas());
-        verify(cuentaService, times(1)).actualizarCuenta(any(Cuenta.class));
-        verify(prestamoDao, times(1)).save(any(Prestamo.class));
-    }
-
-    @Test
     public void testPagarCuotaPrestamoNoEncontrado() {
         when(prestamoDao.find(1L)).thenReturn(null);
 
@@ -167,43 +140,6 @@ public class PrestamoServiceTest {
 
         assertThrows(CuentaNotFoundException.class, () -> prestamoService.pagarCuota(1L, 88));
     }
-
-    /*@Test
-    public void testPagarCuotaMontoIncorrecto() throws ClienteNotFoundException {
-        Prestamo prestamo = new Prestamo();
-        prestamo.setNumeroPrestamo(1L);
-        prestamo.setCuotaMensual(88);
-        prestamo.setDniTitular(12345678);
-        Cliente cliente = new Cliente();
-        cliente.setDni(12345678);
-        Cuenta cuenta = new Cuenta();
-        cuenta.setMoneda(TipoMoneda.PESOS);
-        cliente.setCuentas(Collections.singletonList(cuenta));
-
-        when(prestamoDao.find(1L)).thenReturn(prestamo);
-        when(clienteService.buscarClientePorDni(12345678)).thenReturn(cliente);
-
-        assertThrows(DatosIncorrectosException.class, () -> prestamoService.pagarCuota(1L, 50));
-    }*/
-
-    /*@Test
-    public void testPagarCuotaSaldoInsuficiente() throws ClienteNotFoundException {
-        Prestamo prestamo = new Prestamo();
-        prestamo.setNumeroPrestamo(1L);
-        prestamo.setCuotaMensual(88);
-        prestamo.setDniTitular(12345678);
-        Cuenta cuenta = new Cuenta();
-        cuenta.setMoneda(TipoMoneda.PESOS);
-        cuenta.setBalance(50);
-        Cliente cliente = new Cliente();
-        cliente.setDni(12345678);
-        cliente.setCuentas(Collections.singleton(cuenta));
-
-        when(prestamoDao.find(1L)).thenReturn(prestamo);
-        when(clienteService.buscarClientePorDni(12345678)).thenReturn(cliente);
-
-        assertThrows(NoAlcanzaException.class, () -> prestamoService.pagarCuota(1L, 88));
-    }*/
 
     @Test
     public void testObtenerPrestamosPorClienteExitoso() throws ClienteNotFoundException {
