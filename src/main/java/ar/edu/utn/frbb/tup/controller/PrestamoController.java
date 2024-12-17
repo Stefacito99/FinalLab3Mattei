@@ -31,7 +31,7 @@ public class PrestamoController {
     }
 
     @PostMapping("/pago/{id}")
-    public ResponseEntity<?> pagarCuota(@PathVariable long id, @RequestParam double monto) throws PrestamoNotFoundException, CuentaNotFoundException, NoAlcanzaException, DatosIncorrectosException, ClienteNotFoundException {
+    public ResponseEntity<?> pagarCuota(@PathVariable long id, @RequestParam double monto) throws PrestamoNotFoundException, CuentaNotFoundException, NoAlcanzaException, DatosIncorrectosException, ClienteNotFoundException, PrestamoPagadoException {
         Prestamo prestamo = prestamoService.pagarCuota(id, monto);
         return new ResponseEntity<>(prestamo, HttpStatus.OK);
     }

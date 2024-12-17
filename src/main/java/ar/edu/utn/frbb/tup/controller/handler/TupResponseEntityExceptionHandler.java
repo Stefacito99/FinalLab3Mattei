@@ -121,6 +121,15 @@ public class TupResponseEntityExceptionHandler {
         return buildResponseEntity(response, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(PrestamoPagadoException.class)
+    public ResponseEntity<Map<String, Object>> handlePrestamoPagadoException(PrestamoPagadoException ex) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("timestamp", LocalDateTime.now());
+        response.put("errorCode", 400);
+        response.put("errorMessage", ex.getMessage());
+        return buildResponseEntity(response, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, Object>> handleGeneralException(Exception ex) {
         Map<String, Object> response = new HashMap<>();

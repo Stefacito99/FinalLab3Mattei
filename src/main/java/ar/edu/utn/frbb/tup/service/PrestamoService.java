@@ -71,10 +71,14 @@ public class PrestamoService {
         return prestamo;
     }
 
-    public Prestamo pagarCuota(long numeroPrestamo, double monto) throws PrestamoNotFoundException, CuentaNotFoundException, NoAlcanzaException, DatosIncorrectosException, ClienteNotFoundException {
+    public Prestamo pagarCuota(long numeroPrestamo, double monto) throws PrestamoNotFoundException, CuentaNotFoundException, NoAlcanzaException, DatosIncorrectosException, ClienteNotFoundException, PrestamoPagadoException {
         Prestamo prestamo = prestamoDao.find(numeroPrestamo);
         if (prestamo == null) {
             throw new PrestamoNotFoundException("Préstamo no encontrado.");
+        }
+    
+        if (prestamo.getMontoFaltanteAPagar() <= 0) {
+            throw new PrestamoPagadoException("El préstamo ya ha sido completamente pagado.");
         }
     
         Cliente cliente = clienteService.buscarClientePorDni(prestamo.getDniTitular());
