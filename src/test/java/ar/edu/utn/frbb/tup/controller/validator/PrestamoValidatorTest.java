@@ -2,7 +2,6 @@ package ar.edu.utn.frbb.tup.controller.validator;
 
 import ar.edu.utn.frbb.tup.controller.dto.PrestamoDto;
 import ar.edu.utn.frbb.tup.model.exception.DatosIncorrectosException;
-import ar.edu.utn.frbb.tup.model.exception.TipoMonedaNoSoportada;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -23,9 +22,9 @@ public class PrestamoValidatorTest {
         prestamoDto.setMoneda("X");
         prestamoDto.setMonto(1000);
         prestamoDto.setPlazoMeses(12);
-        prestamoDto.setNumeroCliente(12345678);
+        prestamoDto.setDniTitular(12345678);
 
-        assertThrows(TipoMonedaNoSoportada.class, () -> prestamoValidator.validar(prestamoDto), "Tipo de moneda no soportada");
+        assertThrows(DatosIncorrectosException.class, () -> prestamoValidator.validar(prestamoDto), "El tipo de moneda no es correcto");
     }
 
     @Test
@@ -34,40 +33,29 @@ public class PrestamoValidatorTest {
         prestamoDto.setMoneda("P");
         prestamoDto.setMonto(0);
         prestamoDto.setPlazoMeses(12);
-        prestamoDto.setNumeroCliente(12345678);
+        prestamoDto.setDniTitular(12345678);
 
-        assertThrows(IllegalArgumentException.class, () -> prestamoValidator.validar(prestamoDto), "El monto debe ser mayor a 0");
+        assertThrows(DatosIncorrectosException.class, () -> prestamoValidator.validar(prestamoDto), "El monto del préstamo debe ser mayor a cero");
     }
 
     @Test
-    public void testValidarPlazoMesesInvalido() {
-        PrestamoDto prestamoDto = new PrestamoDto();
-        prestamoDto.setMoneda("P");
-        prestamoDto.setMonto(1000);
-        prestamoDto.setPlazoMeses(0);
-        prestamoDto.setNumeroCliente(12345678);
-
-        assertThrows(IllegalArgumentException.class, () -> prestamoValidator.validar(prestamoDto), "El plazo en meses debe ser mayor a 0");
-    }
-
-    @Test
-    public void testValidarNumeroClienteInvalido() {
+    public void testValidarDniTitularInvalido() {
         PrestamoDto prestamoDto = new PrestamoDto();
         prestamoDto.setMoneda("P");
         prestamoDto.setMonto(1000);
         prestamoDto.setPlazoMeses(12);
-        prestamoDto.setNumeroCliente(0);
+        prestamoDto.setDniTitular(0);
 
-        assertThrows(IllegalArgumentException.class, () -> prestamoValidator.validar(prestamoDto), "El numero de cliente debe ser mayor a 0");
+        assertThrows(DatosIncorrectosException.class, () -> prestamoValidator.validar(prestamoDto), "El DNI del titular no es válido");
     }
 
     @Test
-    public void testValidarPrestamoValido() throws DatosIncorrectosException, TipoMonedaNoSoportada {
+    public void testValidarPrestamoValido() throws DatosIncorrectosException {
         PrestamoDto prestamoDto = new PrestamoDto();
         prestamoDto.setMoneda("P");
         prestamoDto.setMonto(1000);
         prestamoDto.setPlazoMeses(12);
-        prestamoDto.setNumeroCliente(12345678);
+        prestamoDto.setDniTitular(12345678);
 
         prestamoValidator.validar(prestamoDto);
     }

@@ -2,38 +2,35 @@ package ar.edu.utn.frbb.tup.persistence;
 
 import ar.edu.utn.frbb.tup.model.Prestamo;
 import ar.edu.utn.frbb.tup.persistence.entity.PrestamoEntity;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
-@Repository
+@Component
 public class PrestamoDao extends AbstractBaseDao {
-
-    public PrestamoDao() {
-        super();
-    }
-
-    public Prestamo find(long id) {
-        if (getInMemoryDatabase().get(id) == null) {
-            return null;
-        }
-        return ((PrestamoEntity) getInMemoryDatabase().get(id)).toPrestamo();
-    }
-
-    public void save(Prestamo prestamo) {
-        PrestamoEntity prestamoEntity = new PrestamoEntity(prestamo);
-        getInMemoryDatabase().put(prestamoEntity.getId(), prestamoEntity);
-    }
-
-    public List<Prestamo> findAll() {
-        return getInMemoryDatabase().values().stream()
-                .map(entity -> ((PrestamoEntity) entity).toPrestamo())
-                .collect(Collectors.toList());
-    }
+    private Map<Long, PrestamoEntity> database = new HashMap<>();
 
     @Override
     protected String getEntityName() {
         return "PRESTAMO";
+    }
+
+    public Prestamo find(long id) {
+        PrestamoEntity entity = database.get(id);
+        return entity != null ? entity.toPrestamo() : null;
+    }
+
+    public void save(Prestamo prestamo) {
+        PrestamoEntity entity = new PrestamoEntity(prestamo);
+        database.put(prestamo.getNumeroPrestamo(), entity);
+    }
+
+    public List<Prestamo> findAll() {
+        return database.values().stream()
+                .map(PrestamoEntity::toPrestamo)
+                .collect(Collectors.toList());
     }
 }

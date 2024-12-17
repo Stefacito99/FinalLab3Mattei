@@ -7,6 +7,7 @@ import ar.edu.utn.frbb.tup.model.enums.TipoPersona;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class ClienteEntity extends BaseEntity {
 
@@ -34,7 +35,7 @@ public class ClienteEntity extends BaseEntity {
         }
     }
 
-    public Cliente toCliente() {
+    public Cliente toCliente(Set<Cuenta> cuentasSet) {
         Cliente cliente = new Cliente();
         cliente.setDni(this.getId());
         cliente.setNombre(this.nombre);
@@ -43,7 +44,7 @@ public class ClienteEntity extends BaseEntity {
         cliente.setFechaAlta(this.fechaAlta);
         cliente.setFechaNacimiento(this.fechaNacimiento);
         cliente.setBanco(this.banco);
-
+        cliente.setCuentas(cuentasSet);
         return cliente;
     }
 

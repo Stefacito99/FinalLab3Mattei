@@ -1,10 +1,14 @@
 package ar.edu.utn.frbb.tup.persistence;
 
 import ar.edu.utn.frbb.tup.model.Cliente;
+import ar.edu.utn.frbb.tup.model.Cuenta;
 import ar.edu.utn.frbb.tup.model.exception.DatosIncorrectosException;
 import ar.edu.utn.frbb.tup.persistence.entity.ClienteEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class ClienteDao extends AbstractBaseDao {
@@ -20,7 +24,12 @@ public class ClienteDao extends AbstractBaseDao {
                 return null;
             }
 
-            return ((ClienteEntity) entity).toCliente();
+            ClienteEntity clienteEntity = (ClienteEntity) entity;
+            Set<Cuenta> cuentasSet = clienteEntity.getCuentas().stream()
+                    .map(cuentaDao::find)
+                    .collect(Collectors.toSet());
+
+            return clienteEntity.toCliente(cuentasSet);
 
         } catch (Exception e) {
             throw new RuntimeException("Error al buscar el cliente con DNI: " + dni, e);
@@ -30,6 +39,9 @@ public class ClienteDao extends AbstractBaseDao {
     public void save(Cliente cliente) throws DatosIncorrectosException {
         ClienteEntity entity = new ClienteEntity(cliente);
         getInMemoryDatabase().put(cliente.getDni(), entity);
+        for (Cuenta cuenta : cliente.getCuentas()) {
+            cuentaDao.save(cuenta);
+        }
     }
 
     @Override

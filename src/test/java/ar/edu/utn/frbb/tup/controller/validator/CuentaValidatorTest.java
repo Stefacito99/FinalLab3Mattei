@@ -1,6 +1,7 @@
 package ar.edu.utn.frbb.tup.controller.validator;
 
 import ar.edu.utn.frbb.tup.controller.dto.CuentaDto;
+import ar.edu.utn.frbb.tup.model.exception.DatosIncorrectosException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -23,7 +24,7 @@ public class CuentaValidatorTest {
         cuentaDto.setBalance(1000);
         cuentaDto.setDniTitular(12345678);
 
-        assertThrows(IllegalArgumentException.class, () -> cuentaValidator.validate(cuentaDto), "El tipo de cuenta no es correcto");
+        assertThrows(DatosIncorrectosException.class, () -> cuentaValidator.validate(cuentaDto), "El tipo de cuenta no es correcto");
     }
 
     @Test
@@ -34,7 +35,7 @@ public class CuentaValidatorTest {
         cuentaDto.setBalance(1000);
         cuentaDto.setDniTitular(12345678);
 
-        assertThrows(IllegalArgumentException.class, () -> cuentaValidator.validate(cuentaDto), "El tipo de moneda no es correcto");
+        assertThrows(DatosIncorrectosException.class, () -> cuentaValidator.validate(cuentaDto), "El tipo de moneda no es correcto");
     }
 
     @Test
@@ -45,7 +46,7 @@ public class CuentaValidatorTest {
         cuentaDto.setBalance(-1000);
         cuentaDto.setDniTitular(12345678);
 
-        assertThrows(IllegalArgumentException.class, () -> cuentaValidator.validate(cuentaDto), "El balance no puede ser negativo");
+        assertThrows(DatosIncorrectosException.class, () -> cuentaValidator.validate(cuentaDto), "El balance no puede ser negativo");
     }
 
     @Test
@@ -56,11 +57,11 @@ public class CuentaValidatorTest {
         cuentaDto.setBalance(1000);
         cuentaDto.setDniTitular(-1);
 
-        assertThrows(IllegalArgumentException.class, () -> cuentaValidator.validate(cuentaDto), "El DNI del titular no es válido");
+        assertThrows(DatosIncorrectosException.class, () -> cuentaValidator.validate(cuentaDto), "El DNI del titular no es válido");
     }
 
     @Test
-    public void testValidateCuentaValida() {
+    public void testValidateCuentaValida() throws DatosIncorrectosException {
         CuentaDto cuentaDto = new CuentaDto();
         cuentaDto.setTipoCuenta("CC");
         cuentaDto.setTipoMoneda("P");

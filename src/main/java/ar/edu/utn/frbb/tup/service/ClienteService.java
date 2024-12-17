@@ -3,8 +3,6 @@ package ar.edu.utn.frbb.tup.service;
 import ar.edu.utn.frbb.tup.controller.dto.ClienteDto;
 import ar.edu.utn.frbb.tup.model.Cliente;
 import ar.edu.utn.frbb.tup.model.Cuenta;
-import ar.edu.utn.frbb.tup.model.enums.TipoCuenta;
-import ar.edu.utn.frbb.tup.model.enums.TipoMoneda;
 import ar.edu.utn.frbb.tup.model.exception.ClienteAlreadyExistsException;
 import ar.edu.utn.frbb.tup.model.exception.ClienteNotFoundException;
 import ar.edu.utn.frbb.tup.model.exception.DatosIncorrectosException;
@@ -40,7 +38,7 @@ public class ClienteService {
 
         // Verificar si el cliente ya tiene una cuenta del mismo tipo y moneda
         if (titular.tieneCuenta(cuenta.getTipoCuenta(), cuenta.getMoneda())) {
-            throw new TipoCuentaAlreadyExistsException("El cliente ya posee una cuenta de tipo " + cuenta.getTipoCuenta() + " y moneda " + cuenta.getMoneda());
+            throw new TipoCuentaAlreadyExistsException("El cliente con dni: " + dniTitular + " ya tiene una cuenta de tipo " + cuenta.getTipoCuenta() + " y moneda " + cuenta.getMoneda());
         }
 
         titular.addCuenta(cuenta);

@@ -103,12 +103,8 @@ public class Cliente {
     }
 
     public boolean tieneCuenta(TipoCuenta tipoCuenta, TipoMoneda moneda) {
-        for (Cuenta cuenta : cuentas) {
-            if (tipoCuenta.equals(cuenta.getTipoCuenta()) && moneda.equals(cuenta.getMoneda())) {
-                return true;
-            }
-        }
-        return false;
+        return cuentas.stream()
+                .anyMatch(cuenta -> tipoCuenta.equals(cuenta.getTipoCuenta()) && moneda.equals(cuenta.getMoneda()));
     }
 
     public int getEdad() {

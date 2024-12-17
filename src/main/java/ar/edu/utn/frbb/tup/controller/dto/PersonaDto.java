@@ -1,9 +1,5 @@
 package ar.edu.utn.frbb.tup.controller.dto;
 
-import ar.edu.utn.frbb.tup.model.enums.TipoPersona;
-
-import java.time.LocalDate;
-
 public class PersonaDto {
     private String nombre;
     private String apellido;

@@ -3,70 +3,54 @@ package ar.edu.utn.frbb.tup.model;
 import ar.edu.utn.frbb.tup.controller.dto.PrestamoDto;
 import ar.edu.utn.frbb.tup.model.enums.TipoMoneda;
 
-import java.util.concurrent.atomic.AtomicLong;
+import java.time.LocalDateTime;
 
 public class Prestamo {
-    private static final AtomicLong ID_GENERATOR = new AtomicLong(1);
+    private static long contadorPrestamos = 0;
 
-    private long id;
-    private long numeroCliente;
-    private int plazoMeses;
+    private long numeroPrestamo;
+    private LocalDateTime fechaCreacion;
     private double monto;
-    private double montoConIntereses;
-    private double saldoRestante;
-    private double valorCuota;
-    private int cuotasPagas;
     private TipoMoneda moneda;
+    private long dniTitular;
+    private int plazoMeses;
+    private int cuotasPagadas;
+    private int montoTotal;
+    private int cuotaMensual;
+    private int montoFaltanteAPagar;
 
     public Prestamo() {
-        this.id = ID_GENERATOR.getAndIncrement();
+        this.numeroPrestamo = ++contadorPrestamos;
+        this.fechaCreacion = LocalDateTime.now();
+        this.cuotasPagadas = 0;
     }
 
     public Prestamo(PrestamoDto prestamoDto) {
-        this();
-        this.numeroCliente = prestamoDto.getNumeroCliente();
-        this.plazoMeses = prestamoDto.getPlazoMeses();
+        this.numeroPrestamo = ++contadorPrestamos;
+        this.fechaCreacion = LocalDateTime.now();
         this.monto = prestamoDto.getMonto();
         this.moneda = TipoMoneda.fromString(prestamoDto.getMoneda());
-        this.montoConIntereses = calcularMontoConIntereses();
-        this.saldoRestante = this.montoConIntereses;
-        this.valorCuota = calcularValorCuota();
-        this.cuotasPagas = 0;
-    }
-
-    private double calcularMontoConIntereses() {
-        // Implementar lógica para calcular el monto con intereses
-        return this.monto * 1.1; // Ejemplo: 10% de interés
-    }
-
-    private double calcularValorCuota() {
-        // Implementar lógica para calcular el valor de la cuota
-        return this.montoConIntereses / this.plazoMeses;
+        this.dniTitular = prestamoDto.getDniTitular();
+        this.plazoMeses = prestamoDto.getPlazoMeses();
+        this.cuotasPagadas = 0;
+        calcularPlanDePagos();
     }
 
     // Getters y setters
-    public long getId() {
-        return id;
+    public long getNumeroPrestamo() {
+        return numeroPrestamo;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setNumeroPrestamo(long numeroPrestamo) {
+        this.numeroPrestamo = numeroPrestamo;
     }
 
-    public long getNumeroCliente() {
-        return numeroCliente;
+    public LocalDateTime getFechaCreacion() {
+        return fechaCreacion;
     }
 
-    public void setNumeroCliente(long numeroCliente) {
-        this.numeroCliente = numeroCliente;
-    }
-
-    public int getPlazoMeses() {
-        return plazoMeses;
-    }
-
-    public void setPlazoMeses(int plazoMeses) {
-        this.plazoMeses = plazoMeses;
+    public void setFechaCreacion(LocalDateTime fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
     }
 
     public double getMonto() {
@@ -77,43 +61,79 @@ public class Prestamo {
         this.monto = monto;
     }
 
-    public double getMontoConIntereses() {
-        return montoConIntereses;
-    }
-
-    public void setMontoConIntereses(double montoConIntereses) {
-        this.montoConIntereses = montoConIntereses;
-    }
-
-    public double getSaldoRestante() {
-        return saldoRestante;
-    }
-
-    public void setSaldoRestante(double saldoRestante) {
-        this.saldoRestante = saldoRestante;
-    }
-
-    public double getValorCuota() {
-        return valorCuota;
-    }
-
-    public void setValorCuota(double valorCuota) {
-        this.valorCuota = valorCuota;
-    }
-
-    public int getCuotasPagas() {
-        return cuotasPagas;
-    }
-
-    public void setCuotasPagas(int cuotasPagas) {
-        this.cuotasPagas = cuotasPagas;
-    }
-
     public TipoMoneda getMoneda() {
         return moneda;
     }
 
     public void setMoneda(TipoMoneda moneda) {
         this.moneda = moneda;
+    }
+
+    public long getDniTitular() {
+        return dniTitular;
+    }
+
+    public void setDniTitular(long dniTitular) {
+        this.dniTitular = dniTitular;
+    }
+
+    public int getPlazoMeses() {
+        return plazoMeses;
+    }
+
+    public void setPlazoMeses(int plazoMeses) {
+        this.plazoMeses = plazoMeses;
+    }
+
+    public int getCuotasPagadas() {
+        return cuotasPagadas;
+    }
+
+    public void setCuotasPagadas(int cuotasPagadas) {
+        this.cuotasPagadas = cuotasPagadas;
+    }
+
+    public int getMontoTotal() {
+        return montoTotal;
+    }
+
+    public static long getContadorPrestamos() {
+        return contadorPrestamos;
+    }
+
+    public static void setContadorPrestamos(long contadorPrestamos) {
+        Prestamo.contadorPrestamos = contadorPrestamos;
+    }
+
+    public void setMontoTotal(int montoTotal) {
+        this.montoTotal = montoTotal;
+    }
+
+    public void setCuotaMensual(int cuotaMensual) {
+        this.cuotaMensual = cuotaMensual;
+    }
+
+    public void setMontoFaltanteAPagar(int montoFaltanteAPagar) {
+        this.montoFaltanteAPagar = montoFaltanteAPagar;
+    }
+
+    public int getCuotaMensual() {
+        return cuotaMensual;
+    }
+
+    public int getMontoFaltanteAPagar() {
+        return montoFaltanteAPagar;
+    }
+
+    private void calcularPlanDePagos() {
+        double tasaInteresAnual = 0.05;
+        double tasaInteresMensual = tasaInteresAnual / 12;
+        this.montoTotal = (int) Math.round(this.monto * Math.pow(1 + tasaInteresMensual, this.plazoMeses));
+        this.cuotaMensual = (int) Math.round((double) this.montoTotal / this.plazoMeses);
+        this.montoFaltanteAPagar = this.montoTotal;
+    }
+
+    public void actualizarMontoFaltanteAPagar() {
+        this.montoFaltanteAPagar = this.montoTotal - (this.cuotasPagadas * this.cuotaMensual);
     }
 }

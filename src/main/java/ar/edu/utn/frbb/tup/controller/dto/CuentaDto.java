@@ -1,46 +1,29 @@
 package ar.edu.utn.frbb.tup.controller.dto;
 
-import java.time.LocalDateTime;
-
-import ar.edu.utn.frbb.tup.model.enums.TipoCuenta;
-import ar.edu.utn.frbb.tup.model.enums.TipoMoneda;
-
-public class CuentaDto extends ClienteDto{
-
+public class CuentaDto {
     private long numeroCuenta;
-    private int balance;
+    private double balance;
     private String tipoCuenta;
     private String tipoMoneda;
-    private LocalDateTime fechaCreacion;
     private long dniTitular;
 
-    
-
-    
+    // Getters y setters
+    public long getNumeroCuenta() {
+        return numeroCuenta;
+    }
 
     public void setNumeroCuenta(long numeroCuenta) {
         this.numeroCuenta = numeroCuenta;
     }
 
-    public LocalDateTime getFechaCreacion() {
-        return fechaCreacion;
-    }
-
-    public void setFechaCreacion(LocalDateTime fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
-    }
-
-    public int getBalance() {
+    public double getBalance() {
         return balance;
     }
 
-    public void setBalance(int balance) {
+    public void setBalance(double balance) {
         this.balance = balance;
     }
 
-    public long getNumeroCuenta() {
-        return numeroCuenta;
-    }
     public String getTipoCuenta() {
         return tipoCuenta;
     }
