@@ -7,7 +7,6 @@ public class PrestamoDto {
     private long dniTitular;
     private int plazoMeses;
 
-    // Getters y setters
     public long getNumeroPrestamo() {
         return numeroPrestamo;
     }

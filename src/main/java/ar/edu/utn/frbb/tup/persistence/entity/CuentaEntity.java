@@ -34,7 +34,6 @@ public class CuentaEntity extends BaseEntity {
         return cuenta;
     }
 
-    // Getters y setters
     public long getNumeroCuenta() {
         return numeroCuenta;
     }

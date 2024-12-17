@@ -36,7 +36,6 @@ public class Prestamo {
         calcularPlanDePagos();
     }
 
-    // Getters y setters
     public long getNumeroPrestamo() {
         return numeroPrestamo;
     }

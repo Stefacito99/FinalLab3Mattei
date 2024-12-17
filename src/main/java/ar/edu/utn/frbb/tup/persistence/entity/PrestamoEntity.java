@@ -42,7 +42,6 @@ public class PrestamoEntity extends BaseEntity {
         return prestamo;
     }
 
-    // Getters y setters
     public long getNumeroPrestamo() {
         return numeroPrestamo;
     }

@@ -95,7 +95,7 @@ public class PrestamoService {
             throw new NoAlcanzaException("No hay suficiente saldo en la cuenta para pagar la cuota.");
         }
     
-        // Solo se realizan modificaciones si hay suficiente saldo
+        // Solo se realizan modificaciones si no hay exceptions
         cuenta.setBalance(cuenta.getBalance() - monto);
         cuentaService.actualizarCuenta(cuenta);
     
