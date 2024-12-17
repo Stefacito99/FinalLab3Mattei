@@ -1,5 +1,5 @@
 # **Proyecto Final - Laboratorio 3**  
-**Autor:** Stefano Mattei  
+**Programador:** Stefano Mattei  
 
 Este es un sistema de gestión de préstamos desarrollado en Java. Permite realizar las siguientes acciones:  
 - Crear clientes y cuentas bancarias.  
