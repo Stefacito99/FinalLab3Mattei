@@ -13,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -131,12 +132,19 @@ public class PrestamoServiceTest {
     }
 
     @Test
-    public void testPagarCuotaCuentaNoEncontrada() throws ClienteNotFoundException {
+    public void testPagarCuotaCuentaNoEncontrada() throws ClienteNotFoundException, CuentaNotFoundException {
         Prestamo prestamo = new Prestamo();
         prestamo.setNumeroPrestamo(1L);
         prestamo.setDniTitular(12345678);
+        prestamo.setMontoFaltanteAPagar(10000);
+        prestamo.setCuotasPagadas(0);
+        prestamo.setPlazoMeses(12);
+        prestamo.setMoneda(TipoMoneda.PESOS);
         when(prestamoDao.find(1L)).thenReturn(prestamo);
-        when(clienteService.buscarClientePorDni(12345678)).thenReturn(new Cliente());
+        
+        Cliente cliente = new Cliente();
+        cliente.setCuentas(Collections.emptySet());
+        when(clienteService.buscarClientePorDni(12345678)).thenReturn(cliente);
 
         assertThrows(CuentaNotFoundException.class, () -> prestamoService.pagarCuota(1L, 88));
     }

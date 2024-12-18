@@ -77,16 +77,18 @@ public class PrestamoService {
             throw new PrestamoNotFoundException("Préstamo no encontrado.");
         }
     
-        if (prestamo.getMontoFaltanteAPagar() <= 0) {
-            throw new PrestamoPagadoException("El préstamo ya ha sido completamente pagado.");
-        }
-    
         Cliente cliente = clienteService.buscarClientePorDni(prestamo.getDniTitular());
         Cuenta cuenta = cliente.getCuentas().stream()
                 .filter(c -> c.getMoneda().equals(prestamo.getMoneda()))
                 .findFirst()
                 .orElseThrow(() -> new CuentaNotFoundException("Cuenta no encontrada."));
-    
+
+        if (prestamo.getMontoFaltanteAPagar() <= 0) {
+            throw new PrestamoPagadoException("El préstamo ya ha sido completamente pagado.");
+        }
+        if (prestamo.getCuotasPagadas() >= prestamo.getPlazoMeses()) {
+            throw new PrestamoPagadoException("El préstamo ya ha sido completamente pagado.");
+        }
         int cuotaMensual = prestamo.getCuotaMensual();
         if (monto != cuotaMensual) {
             throw new DatosIncorrectosException("El monto de la cuota no es correcto.");
